@@ -2,7 +2,7 @@
 <package format="2">
   <name>multi_velodyne</name>
   <version>0.0.0</version>
-  <description>The multi_velodyne package. Written by Jaeil Park, 2017.</description>
+  <description>The multi_velodyne package. Written by Jaeil Park, Seoul Robotics 2017.</description>
   <maintainer email="parkjaeil0108@gmail.com">Jaeil Park</maintainer>
   <license>MIT</license>
 
