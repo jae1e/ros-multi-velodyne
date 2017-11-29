@@ -4,7 +4,7 @@ This is the ROS package containing example code of
 * launch files converting multiple Velodyne sensor inputs to multiple PointCloud2 topics
 * Python script and a launch file of a ROS node subscribing multiple PointCloud2 topics and publishing modified PointCloud2 topics
 
-Written by Jaeil Park, 2017
+Written by Jaeil Park, Seoul Robotics 2017
 
 ### Key files
 
