@@ -19,4 +19,4 @@ A ROS node subscribing two PointCloud2 topics emitted by cloud_nodelet.launch. W
 
 #### [test_script/run_test.launch](test_script/run_test.launch)
 A launch file launching two 'cloud_nodelet.launch' files to receive messages from two Velodyne sensors and 'cloud_listener.launch' file to manipulate point clouds. 
-* Important: You have to use a different port number for each Velodyne sensor.
+* Important: You have to assign a different port number to each Velodyne sensor.
