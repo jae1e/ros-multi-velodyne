@@ -31,6 +31,9 @@
 # POSSIBILITY OF SUCH DAMAGE.
 #
 # Author: Jon Binney
+#
+# Contributor: Jaeil Park, 2017
+
 '''
 Functions for working with PointCloud2.
 '''
@@ -46,8 +49,8 @@ from sensor_msgs.msg import PointCloud2, PointField
 DUMMY_FIELD_PREFIX = '__'
 
 # mappings between PointField types and numpy types
-type_mappings = [(PointField.INT8, np.dtype('int8')), (PointField.UINT8, np.dtype('uint8')), (PointField.INT16, np.pe('int16')),
-                 (PointField.UINT16, np.dtype('uint16')), (PointField.INT32, np.dtype('int32')), (PointField.UINT32, np.pe('uint32')),
+type_mappings = [(PointField.INT8, np.dtype('int8')), (PointField.UINT8, np.dtype('uint8')), (PointField.INT16, np.dtype('int16')),
+                 (PointField.UINT16, np.dtype('uint16')), (PointField.INT32, np.dtype('int32')), (PointField.UINT32, np.dtype('uint32')),
                  (PointField.FLOAT32, np.dtype('float32')), (PointField.FLOAT64, np.dtype('float64'))]
 pftype_to_nptype = dict(type_mappings)
 nptype_to_pftype = dict((nptype, pftype) for pftype, nptype in type_mappings)
@@ -79,6 +82,9 @@ def pointcloud2_to_dtype(cloud_msg):
 def arr_to_fields(cloud_arr):
     '''Convert a numpy record datatype into a list of PointFields.
     '''
+    if cloud_arr.dtype.names is None:
+		    return []
+    
     fields = []
     for field_name in cloud_arr.dtype.names:
         np_field_type, field_offset = cloud_arr.dtype.fields[field_name]
@@ -134,8 +140,39 @@ def array_to_pointcloud2(cloud_arr, stamp=None, frame_id=None, merge_rgb=False):
     cloud_msg.is_bigendian = False # assumption
     cloud_msg.point_step = cloud_arr.dtype.itemsize
     cloud_msg.row_step = cloud_msg.point_step*cloud_arr.shape[1]
-    cloud_msg.is_dense = all([np.isfinite(cloud_arr[fname]).all() for fname in cloud_arr.dtype.names])
+    cloud_msg.is_dense = False if cloud_arr.dtype.names is None else all([np.isfinite(cloud_arr[fname]).all() for fname in cloud_arr.dtype.names])
     cloud_msg.data = cloud_arr.tostring()
+    return cloud_msg
+
+def make_xyz_float32_fields():
+    fields = []
+    names = ['x', 'y', 'z']
+    offset = 0
+    for name in names:
+        field = PointField()
+        field.name = name
+        field.offset = offset
+        field.datatype = 7
+        field.count = 1
+        fields.append(field)
+        # add offset
+        offset += 4
+    return fields
+
+def xyz_float32_array_to_pointcloud2(cloud_arr, frame_id=None):
+    '''Converts a numpy array of shape (num_points, 3) to a sensor_msgs.msg.PointCloud2)
+    '''
+    cloud_msg = PointCloud2()
+    if frame_id is not None:
+        cloud_msg.header.frame_id = frame_id
+    cloud_msg.height = 1
+    cloud_msg.width = cloud_arr.shape[0]
+    cloud_msg.fields = make_xyz_float32_fields()
+    cloud_msg.is_bigendian = False
+    cloud_msg.point_step = 12
+    cloud_msg.row_step = cloud_msg.point_step * cloud_msg.width
+    cloud_msg.data = np.expand_dims(cloud_arr, 0).tostring()
+    cloud_msg.is_dense = True
     return cloud_msg
 
 def merge_rgb_fields(cloud_arr):
@@ -147,7 +184,7 @@ def merge_rgb_fields(cloud_arr):
     '''
     r = np.asarray(cloud_arr['r'], dtype=np.uint32)
     g = np.asarray(cloud_arr['g'], dtype=np.uint32)
-    b = np.asarray(cloud_arr['b'], dtype=np.uint32)    
+    b = np.asarray(cloud_arr['b'], dtype=np.uint32)
     rgb_arr = np.array((r << 16) | (g << 8) | (b << 0), dtype=np.uint32)
 
     # not sure if there is a better way to do this. i'm changing the type of the array
@@ -224,5 +261,5 @@ def get_xyz_points(cloud_array, remove_nans=True, dtype=np.float):
 
     return points
 
-def pointcloud2_to_xyz_array(cloud_msg, remove_nans=True):
-    return get_xyz_points(pointcloud2_to_array(cloud_msg), remove_nans=remove_nans)
+def pointcloud2_to_xyz_array(cloud_msg, remove_nans=True, dtype=np.float):
+    return get_xyz_points(pointcloud2_to_array(cloud_msg), remove_nans=remove_nans, dtype=dtype)
