@@ -18,5 +18,5 @@ File to launch 'cloud_listner.py' node. See 'script/cloud_listener.py'.
 A ROS node subscribing two PointCloud2 topics emitted by cloud_nodelet.launch. When a PointCloud2 topic is received, the node translates XYZ points in the topic by 'topicN_shift' and publishes translated XYZ points (without intensity and laser id) with a prefix 'translated/' which makes the name of a new topic 'translated/original_topic_name'. Frame id of the new topic is 'velodyne', same as the original topic's. 
 
 #### [test_script/run_test.launch](test_script/run_test.launch)
-A launch file launching two 'cloud_nodelet.launch' files to receive messages from two Velodyne sensors and 'cloud_listener.launch' file to manipulate point clouds. 
+A launch file launching 'cloud_nodelet.launch' file twice to receive messages from two Velodyne sensors, and 'cloud_listener.launch' file to manipulate point clouds. 
 * Important: You have to assign a different port number to each Velodyne sensor.
