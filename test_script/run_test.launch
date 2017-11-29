@@ -1,0 +1,31 @@
+<launch>
+	<arg name="model1" value="32E" />
+	<arg name="model2" value="32E" />
+	<arg name="topic1" value="velodyne_points1" />
+	<arg name="topic2" value="velodyne_points2" />
+	<arg name="port1" value="2368" />
+	<arg name="port2" value="2368" /> 
+  <arg name="calibration1" value="$(find velodyne_pointcloud)/params/32db.yaml"/>
+  <arg name="calibration2" value="$(find velodyne_pointcloud)/params/32db.yaml"/>
+
+	<include file="$(find multi_velodyne)/launch/cloud_nodelet.launch">
+		<arg name="model" value="$(arg model1)" />
+		<arg name="topic_name" value="$(arg topic1)" />
+		<arg name="port" value="$(arg port1)" /> 
+		<arg name="calibration" value="$(arg calibration1)" />
+	</include>
+
+	<include file="$(find multi_velodyne)/launch/cloud_nodelet.launch">
+		<arg name="model" value="$(arg model2)" />
+		<arg name="topic_name" value="$(arg topic2)" />
+		<arg name="port" value="$(arg port2)" />
+		<arg name="calibration" value="$(arg calibration2)" />
+	</include>
+
+	<include file="$(find multi_velodyne)/launch/cloud_listener.launch">
+		<arg name="topic1" value="$(arg topic1)" />
+		<arg name="topic2" value="$(arg topic2)" />
+	</include>
+
+</launch>
+

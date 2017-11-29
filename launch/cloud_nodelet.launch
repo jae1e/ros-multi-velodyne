@@ -1,0 +1,41 @@
+<launch>
+	<!-- topic name -->
+	<arg name="topic_name" default="velodyne_points" />
+	<!-- arguments for driver manager -->
+	<arg name="model" default="VLP16" />
+	<arg name="device_ip" default="" />
+	<arg name="port" default="2368" /> <!-- set different port number for each sensors -->
+	<arg name="read_once" default="false" />
+	<arg name="read_fast" default="false" />
+	<arg name="repeat_delay" default="0.0" />
+	<arg name="rpm" default="600.0" />
+	<!-- arguments for cloud nodelet" -->
+	<arg name="manager" default="$(arg topic_name)_nodelet_manager" />
+	<arg name="calibration" default="$(find velodyne_pointcloud)/params/VLP16db.yaml"/>
+	<arg name="max_range" default="130.0" /> <!-- meters -->
+	<arg name="min_range" default="0.9" /> <!-- meters -->
+
+	<!-- remap topic name -->
+	<remap from="velodyne_points" to="$(arg topic_name)" />
+
+	<!-- driver manager -->
+	<include file="$(find velodyne_driver)/launch/nodelet_manager.launch">
+		<arg name="manager" value="$(arg topic_name)_nodelet_manager" />
+		<arg name="model" value="$(arg model)" />
+		<arg name="device_ip" value="$(arg device_ip)" /> 
+		<arg name="port" value="$(arg port)" /> 
+		<arg name="read_once"  value="$(arg read_once)" />
+		<arg name="read_fast" value="$(arg read_fast)" />
+		<arg name="repeat_delay" value="$(arg repeat_delay)" />
+		<arg name="rpm" value="$(arg rpm)" />
+	</include>
+
+	<!-- cloud nodelet -->
+	<include file="$(find velodyne_pointcloud)/launch/cloud_nodelet.launch">
+		<arg name="manager" value="$(arg topic_name)_nodelet_manager" />
+		<arg name="calibration" value="$(arg calibration)" />
+		<arg name="max_range" value="$(arg max_range)" />
+		<arg name="min_range" value="$(arg min_range)" />
+	</include>
+
+</launch>

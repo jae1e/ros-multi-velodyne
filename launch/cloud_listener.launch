@@ -1,0 +1,8 @@
+<launch>
+	<arg name="topic1" />
+	<arg name="topic2" />
+
+	<node name="cloud_listener" pkg="multi_velodyne" type="cloud_listener.py" args="$(arg topic1) $(arg topic2)" respawn="false" output="screen" cwd="ROS_HOME" required="false" />
+
+</launch>
+

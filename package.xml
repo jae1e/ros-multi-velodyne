@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>multi-velodyne</name>
+  <name>multi_velodyne</name>
   <version>0.0.0</version>
-  <description>The multi-velodyne package</description>
+  <description>The multi_velodyne package</description>
   <maintainer email="parkjaeil0108@gmail.com">Jaeil Park</maintainer>
   <license>BSD</license>
 

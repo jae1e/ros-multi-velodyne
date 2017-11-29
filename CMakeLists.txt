@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(multi-velodyne)
+project(multi_velodyne)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 add_compile_options(-std=c++11)
@@ -38,4 +38,22 @@ include_directories(
 		${catkin_INCLUDE_DIRS}
 		# ${Boost_INCLUDE_DIRS}
 )
+
+# Install cpp source
+add_executable(bag_player
+	src/bag_player.cpp
+)
+
+target_link_libraries(bag_player ${catkin_LIBRARIES})
+
+# Install python script
+# catkin_install_python(
+# 	PROGRAMS
+# 		script/cloud_listener.py
+# 	DESTINATION
+# 		${CATKIN_PACKAGE_BIN_DESTINATION}
+# )
+
+# install headers
+install(DIRECTORY include/${PROJECT_NAME}/ DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION})
 

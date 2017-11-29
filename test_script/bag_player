@@ -1,0 +1,7 @@
+#! /bin/bash
+
+# arguments
+FILE_PATH="/home/seoulrobotics/Dataset/didi-example/nissan_pulling_to_left/nissan03.bag"
+
+roslaunch bag_player.launch bag_file_path:=$FILE_PATH
+

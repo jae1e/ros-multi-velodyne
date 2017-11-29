@@ -1,0 +1,7 @@
+<launch>
+	<arg name="bag_file_path" />
+
+	<node name="bag_player" pkg="multi_velodyne" type="bag_player" args="$(arg bag_file_path)" respawn="false" output="screen" required="true"/>
+
+</launch>
+
