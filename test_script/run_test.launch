@@ -3,8 +3,8 @@
 	<arg name="model2" value="32E" />
 	<arg name="topic1" value="velodyne_points1" />
 	<arg name="topic2" value="velodyne_points2" />
-	<arg name="port1" value="2368" />
-	<arg name="port2" value="2369" /> 
+	<arg name="port1" value="2368" /> <!-- make sure that each sensor has a different port number -->
+	<arg name="port2" value="2369" /> <!-- make sure that each sensor has a different port number -->
   <arg name="calibration1" value="$(find velodyne_pointcloud)/params/32db.yaml"/>
   <arg name="calibration2" value="$(find velodyne_pointcloud)/params/32db.yaml"/>
 
